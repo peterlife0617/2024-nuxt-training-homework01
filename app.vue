@@ -1,6 +1,13 @@
 <template>
-  <div>
-    <NuxtRouteAnnouncer />
+  <NuxtLayout>
     <NuxtPage />
-  </div>
+  </NuxtLayout>
 </template>
+
+<style>
+.list {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+}
+</style>
