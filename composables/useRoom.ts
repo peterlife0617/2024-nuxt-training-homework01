@@ -19,10 +19,12 @@ export const useRoom = () => {
 
     try {
       if (!id) {
-        return {};
+        return null;
       }
       const newsResponse = await fetch(`https://nuxr3.zeabur.app/api/v1/rooms/${id}`).then((res) => res.json())
       return newsResponse.result;
+    } catch (e) {
+      return null;
     } finally {
       isLoading.value = false;
     }
