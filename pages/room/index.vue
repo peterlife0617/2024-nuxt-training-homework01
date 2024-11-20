@@ -21,7 +21,7 @@ const router = useRouter();
         v-for="room in roomsList"
         :key="room._id"
       >
-        <div class="card h-100 shadow-sm" @click="router.push('/room/_id')">
+        <div class="card h-100 shadow-sm" @click="router.push(`/room/${room._id}`)">
           <img :src="room.imageUrl" class="card-img-top" alt="Room Image" />
           <div class="card-body d-flex flex-column">
             <h3 class="card-title">{{ room.name }}</h3>
