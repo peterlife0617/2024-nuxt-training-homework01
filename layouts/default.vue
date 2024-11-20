@@ -1,26 +1,35 @@
-<script setup lang="ts"></script>
+<script setup></script>
 
 <template>
-  <header>
-    <ul class="list">
-      <li>
-        <NuxtLink to="/">前台首頁</NuxtLink>
-      </li>
-      <li>
-        <NuxtLink to="/about">前台 About</NuxtLink>
-      </li>
-      <li>
-        <NuxtLink to="/admin">前往 後台首頁</NuxtLink>
-      </li>
-      <li>
-        <NuxtLink to="/admin/order">前往 後台訂單</NuxtLink>
-      </li>
-    </ul>
-  </header>
-  <slot />
-  <footer>
-    <h5>前台模板的表尾</h5>
-  </footer>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container">
+      <NuxtLink class="navbar-brand" to="/">Navbar</NuxtLink>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <NuxtLink class="nav-link" aria-current="page" to="/">首頁</NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link"  to="/room">房型</NuxtLink>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main class="container">
+    <slot />
+  </main>
 </template>
 
 <style scoped></style>
