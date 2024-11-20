@@ -1,14 +1,16 @@
 <script setup lang="ts">
 defineProps({
   price: String,
-});
+})
 </script>
 
 <template>
-  <p class="product-price">{{ price }}</p>
+  <p class="product-price">
+    {{ price }}
+  </p>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .product-price {
   font-size: 16px;
   color: #007bff;

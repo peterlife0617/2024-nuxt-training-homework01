@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup lang="ts"></script>
 
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
-      <NuxtLink class="navbar-brand" to="/">Navbar</NuxtLink>
+      <NuxtLink class="navbar-brand" to="/">
+        Navbar
+      </NuxtLink>
       <button
         class="navbar-toggler"
         type="button"
@@ -13,17 +15,19 @@
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon" />
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div id="navbarNav" class="collapse navbar-collapse">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <NuxtLink class="nav-link" to="/">首頁</NuxtLink>
+            <NuxtLink class="nav-link" to="/">
+              首頁
+            </NuxtLink>
           </li>
           <li class="nav-item">
-            <NuxtLink class="nav-link" to="/room"
-              >房型</NuxtLink
-            >
+            <NuxtLink class="nav-link" to="/room">
+              房型
+            </NuxtLink>
           </li>
         </ul>
       </div>
@@ -34,4 +38,4 @@
   </main>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

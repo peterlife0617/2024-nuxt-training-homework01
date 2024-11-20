@@ -1,14 +1,16 @@
 <script setup lang="ts">
 defineProps({
   buttonText: String,
-});
+})
 </script>
 
 <template>
-  <button class="product-button">{{ buttonText }}</button>
+  <button class="product-button">
+    {{ buttonText }}
+  </button>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .product-button {
   display: block;
   width: 100%;

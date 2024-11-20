@@ -3,14 +3,14 @@
     "scope": "vue",
     "prefix": "!vue-basic",
     "body": [
-      "<script setup>",
+      "<script setup lang=\"ts\">",
       "</script>",
       "",
       "<template>",
       "  <h1>${TM_FILENAME_BASE/([^.]+).*/${1:/pascalcase}/g}</h1>",
       " </template>",
       "",
-      "<style scoped>",
+      "<style scoped lang=\"scss\">",
       "</style>",
       ""
     ],

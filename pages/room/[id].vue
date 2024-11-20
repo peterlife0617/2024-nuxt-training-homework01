@@ -1,36 +1,40 @@
-<script setup>
-const router = useRouter();
-const route = useRoute();
+<script setup lang="ts">
+const router = useRouter()
+const route = useRoute()
 
-const room = ref();
-const { getRoom } = useRoom();
-room.value = await getRoom(route.params.id);
+const room = ref()
+const { getRoom } = useRoom()
+room.value = await getRoom(route.params.id)
 </script>
 
 <template>
   <h2>房型詳細頁面</h2>
 
   <div class="container">
-    <button @click="router.go(-1)">回上一頁</button>
-    <div class="row justify-content-center" v-if="room">
+    <button @click="router.go(-1)">
+      回上一頁
+    </button>
+    <div v-if="room" class="row justify-content-center">
       <div class="col-md-6">
         <div class="room-page">
           <div class="room-header">
-            <h1 class="room-name">{{ room.name }}</h1>
+            <h1 class="room-name">
+              {{ room.name }}
+            </h1>
             <p class="room-description">
               {{ room.description }}
             </p>
           </div>
 
           <div class="room-gallery">
-            <img :src="room.imageUrl" alt="房型主圖" class="room-main-image" />
+            <img :src="room.imageUrl" alt="房型主圖" class="room-main-image">
             <div class="room-image-list">
               <img
                 v-for="(image, index) in room.imageUrlList"
                 :key="index"
                 :src="image"
                 :alt="`圖片${index + 1}`"
-              />
+              >
             </div>
           </div>
 
@@ -46,7 +50,7 @@ room.value = await getRoom(route.params.id);
             <div class="info-block">
               <h2>房間配置</h2>
               <ul>
-                <li v-for="layout in room.layoutInfo" :key="index">
+                <li v-for="(layout, index) in room.layoutInfo" :key="index">
                   {{ layout.title }}: {{ layout.isProvide ? '提供' : '無' }}
                 </li>
               </ul>
@@ -55,25 +59,31 @@ room.value = await getRoom(route.params.id);
             <div class="info-block">
               <h2>房內設施</h2>
               <ul>
-                <li v-for="facility in room.facilityInfo" :key="index"> {{ facility.title }}: {{ facility.isProvide ? '提供' : '無' }}</li>
+                <li v-for="(facility, index) in room.facilityInfo" :key="index">
+                  {{ facility.title }}: {{ facility.isProvide ? '提供' : '無' }}
+                </li>
               </ul>
             </div>
 
             <div class="info-block">
               <h2>客房備品</h2>
               <ul>
-                <li v-for="amenity in room.amenityInfo" :key="index"> {{ amenity.title }}: {{ amenity.isProvide ? '提供' : '無' }}</li>
+                <li v-for="(amenity, index) in room.amenityInfo" :key="index">
+                  {{ amenity.title }}: {{ amenity.isProvide ? '提供' : '無' }}
+                </li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div v-else>無此房型</div>
+    <div v-else>
+      無此房型
+    </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .room-page {
   max-width: 1200px;
   margin: 0 auto;

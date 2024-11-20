@@ -6,13 +6,12 @@ defineProps({
 </script>
 
 <template>
-    <div class="product-image">
-      <img :src="imageSrc" :alt="altText" />
-    </div>
+  <div class="product-image">
+    <img :src="imageSrc" :alt="altText">
+  </div>
 </template>
 
-<style scoped>
-
+<style scoped lang="scss">
 .product-image img {
   width: 100%;
   height: auto;

@@ -1,15 +1,15 @@
-<script setup>
-const roomsList = ref([]);
+<script setup lang="ts">
+const roomsList = ref<Record<string, any>>([])
 // 使用 fetch 或 axios 串接 前台房型 API ( GET )
 // apiUrl : https://nuxr3.zeabur.app/api/v1/rooms
 // response 回傳後，將資料寫入 roomsList 變數
 // 使用 roomsList 變數在下方 template 渲染列表
 
-const { getRooms } = useRoom();
+const { getRooms } = useRoom()
 
-roomsList.value = await getRooms();
+roomsList.value = await getRooms()
 
-const router = useRouter();
+const router = useRouter()
 </script>
 
 <template>
@@ -17,15 +17,19 @@ const router = useRouter();
   <div class="container mt-4">
     <div class="row justify-content-center">
       <div
-        class="col-8 col-md-6 col-lg-3"
         v-for="room in roomsList"
         :key="room._id"
+        class="col-8 col-md-6 col-lg-3"
       >
         <div class="card h-100 shadow-sm" @click="router.push(`/room/${room._id}`)">
-          <img :src="room.imageUrl" class="card-img-top" alt="Room Image" />
+          <img :src="room.imageUrl" class="card-img-top" alt="Room Image">
           <div class="card-body d-flex flex-column">
-            <h3 class="card-title">{{ room.name }}</h3>
-            <p class="card-text flex-grow-1">{{ room.description }}</p>
+            <h3 class="card-title">
+              {{ room.name }}
+            </h3>
+            <p class="card-text flex-grow-1">
+              {{ room.description }}
+            </p>
             <ul class="list-unstyled">
               <li><strong>面積:</strong> {{ room.areaInfo }}</li>
               <li><strong>床型:</strong> {{ room.bedInfo }}</li>
@@ -39,7 +43,7 @@ const router = useRouter();
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .card-img-top {
   object-fit: cover;
   height: 200px;

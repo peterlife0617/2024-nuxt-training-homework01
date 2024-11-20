@@ -1,14 +1,16 @@
 <script setup lang="ts">
 defineProps({
   title: String,
-});
+})
 </script>
 
 <template>
-  <h2 class="product-title">{{ title }}</h2>
+  <h2 class="product-title">
+    {{ title }}
+  </h2>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .product-title {
   font-size: 18px;
   font-weight: bold;
