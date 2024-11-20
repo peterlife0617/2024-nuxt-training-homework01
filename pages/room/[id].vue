@@ -17,38 +17,28 @@ const { data: roomObject } = await useFetch(`/rooms/${id}`, {
   },
 })
 
-// 使用 useSeoMeta  將 roomObject 的資訊寫入 SEO Meta
-/* 請撰寫 useSeoMeta({ }) 渲染出下方的 HTML 結構，並將 {{ }}  改成使用 roomObject 物件的資料。
-<title> Freyja | {{ 房型名稱 }}</title>
-<meta name="description" content="{{ 房型描述 }}">
-<meta property="og:title" content="Freyja | {{ 房型名稱 }} ">
-<meta property="og:description" content="{{ 房型描述 }}">
-<meta property="og:image" content="{{房型主圖}}">
-<meta property="og:url" content="https://freyja.travel.com.tw/room/{房型 id }">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Freyja | {{ 房型名稱 }}">
-<meta name="twitter:description" content="{{ 房型描述 }}">
-<meta name="twitter:image" content="{{房型主圖}}">
-*/
+/*
+請將 useSeoMeta({ }) 改成 Nuxt3 SEO 元件的寫法
+重複邏輯的地方可以使用 computed
 
 useSeoMeta({
-  title: () => `Freyja | ${roomObject.value?.name}`,
-  ogTitle: () => `Freyja | ${roomObject.value?.name}`,
-  ogDescription: () => roomObject.value?.description,
-  ogImage: () => roomObject.value?.imageUrl,
-  ogUrl: () => `https://freyja.travel.com.tw/room/${id}`,
-  twitterCard: 'summary_large_image',
-  twitterTitle: () => `Freyja | ${roomObject.value?.name}`,
-  twitterDescription: () => roomObject.value?.description,
-  twitterImage: () => roomObject.value?.imageUrl,
-})
+  title: roomObject.value.name,
+  titleTemplate: (title) => `Freyja | ${title}`,
+  description: () => `${roomObject.value.description}`,
+  ogTitle: () => `Freyja | ${roomObject.value.name}`,
+  ogDescription: () => `${roomObject.value.description}`,
+  ogImage: () => `${roomObject.value.imageUrl}`,
+  ogUrl: () => `https://freyja.travel.com.tw/room/${roomObject.value._id}`,
+  twitterCard: "summary_large_image",
+  twitterTitle: () => `Freyja | ${roomObject.value.name}`,
+  twitterDescription: () => `${roomObject.value.description}`,
+  twitterImage: () => `${roomObject.value.imageUrl}`,
+});
+*/
 
-// useServerSeoMeta({
-//   title: 'Hello World',
-//   ogTitle: 'Hello World',
-//   ogDescription: 'Hello World',
-//   ogImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLZf31OpU0zqzpDS-IwNBp7lF1eejh9YJHHA&s',
-// })
+const title = computed(() => `Freyja | ${roomObject.value?.name}`)
+const description = computed(() => `${roomObject.value?.description}`)
+const imageUrl = computed(() => `${roomObject.value?.imageUrl}`)
 
 const isProvide = function (isProvideBoolean = false) {
   return isProvideBoolean ? '提供' : '未提供'
@@ -56,6 +46,20 @@ const isProvide = function (isProvideBoolean = false) {
 </script>
 
 <template>
+  <Head>
+    <!-- 請在此處作答，使用元件設定頁面的 SEO Meta  -->
+    <Title>{{ title }}</Title>
+    <Meta name="description" :content="description" />
+    <Meta property="og:title" :content="title" />
+    <Meta property="og:description" :content="description" />
+    <Meta property="og:image" :content="imageUrl" />
+    <Meta property="og:url" :content="`https://freyja.travel.com.tw/room/${roomObject?._id}`" />
+    <Meta name="twitter:card" content="summary_large_image" />
+    <Meta name="twitter:title" :content="title" />
+    <Meta name="twitter:description" :content="description" />
+    <Meta name="twitter:image" :content="imageUrl" />
+  </Head>
+
   <h2>房型詳細頁面</h2>
   <div class="container">
     <button @click="router.go(-1)">
@@ -74,10 +78,17 @@ const isProvide = function (isProvideBoolean = false) {
           </div>
 
           <div class="room-gallery">
-            <img :src="roomObject.imageUrl" :alt="roomObject.name" class="room-main-image">
+            <img
+              :src="roomObject.imageUrl"
+              :alt="roomObject.name"
+              class="room-main-image"
+            >
             <ul class="room-image-list">
-              <li v-for="(imageUrl, index) in roomObject.imageUrlList" :key="index">
-                <img :src="imageUrl" :alt="`${roomObject.name}圖片${index + 1}`">
+              <li v-for="(url, index) in roomObject.imageUrlList" :key="index">
+                <img
+                  :src="url"
+                  :alt="`${roomObject.name}圖片${index + 1}`"
+                >
               </li>
             </ul>
           </div>
@@ -103,7 +114,10 @@ const isProvide = function (isProvideBoolean = false) {
             <div class="info-block">
               <h2>房內設施</h2>
               <ul>
-                <li v-for="facility in roomObject.facilityInfo" :key="facility.title">
+                <li
+                  v-for="facility in roomObject.facilityInfo"
+                  :key="facility.title"
+                >
                   {{ facility.title }}: {{ isProvide(facility.isProvide) }}
                 </li>
               </ul>
@@ -112,7 +126,10 @@ const isProvide = function (isProvideBoolean = false) {
             <div class="info-block">
               <h2>客房備品</h2>
               <ul>
-                <li v-for="amenity in roomObject.amenityInfo" :key="amenity.title">
+                <li
+                  v-for="amenity in roomObject.amenityInfo"
+                  :key="amenity.title"
+                >
                   {{ amenity.title }}: {{ isProvide(amenity.isProvide) }}
                 </li>
               </ul>
