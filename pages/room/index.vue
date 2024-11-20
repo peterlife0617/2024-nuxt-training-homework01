@@ -1,13 +1,10 @@
 <script setup lang="ts">
-const roomsList = ref<Record<string, any>>([])
-// 使用 fetch 或 axios 串接 前台房型 API ( GET )
-// apiUrl : https://nuxr3.zeabur.app/api/v1/rooms
-// response 回傳後，將資料寫入 roomsList 變數
-// 使用 roomsList 變數在下方 template 渲染列表
-
-const { getRooms } = useRoom()
-
-roomsList.value = await getRooms()
+const { data: roomsList } = useFetch<Record<string, any>>('https://nuxr3.zeabur.app/api/v1/rooms', {
+  transform: (response) => {
+    const { result } = response
+    return result
+  },
+})
 
 const router = useRouter()
 </script>

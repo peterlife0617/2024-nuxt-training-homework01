@@ -2,9 +2,12 @@
 const router = useRouter()
 const route = useRoute()
 
-const room = ref()
-const { getRoom } = useRoom()
-room.value = await getRoom(route.params.id)
+const { data: room } = useFetch<Record<string, any>>(`https://nuxr3.zeabur.app/api/v1/rooms/${route.params.id}`, {
+  transform: (response) => {
+    const { result } = response
+    return result
+  },
+})
 </script>
 
 <template>
