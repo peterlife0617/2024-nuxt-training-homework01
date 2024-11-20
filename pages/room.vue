@@ -1,9 +1,7 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
-  <h1>房型頁面</h1>
- </template>
+  <NuxtPage></NuxtPage>
+</template>
 
-<style scoped>
-</style>
+<style scoped></style>
