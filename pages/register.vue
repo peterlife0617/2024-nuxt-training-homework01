@@ -1,41 +1,51 @@
 <script setup lang="ts">
-const { success, error } = useAlert()
-const { register } = useRegister()
+import type { FetchError } from 'ofetch'
+import type { UnwrapRef } from 'vue'
 
-// 表單格式
-const userRegisterObject = ref({
-  name: '王小明',
-  email: 'example@gmail.com',
-  password: '12345678',
+const { success, error } = useAlert()
+
+const router = useRouter()
+const userRegisteObject = ref({
+  name: '王曉明',
+  email: 'example13213123@gmail.com',
+  password: 'a12345678',
   phone: '0912345678',
-  birthday: '2000-01-01',
+  birthday: '2024-10-29',
   address: {
     zipcode: '100',
-    detail: '台北市中正區重慶南路一段',
+    detail: '123456',
   },
 })
-
-async function onSubmit() {
+async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObject>) {
   try {
-    const response = await register(Object.assign(userRegisterObject.value, {
-      nickname: userRegisterObject.value.name,
-    }))
-
-    if (response.status) {
-      success(response.message || '註冊成功')
-      return
+    const response = await $fetch<{
+      status: true
+      uid: string
+    } | {
+      status: false
+      message: string
+    }>('/v1/user/signup', {
+      baseURL: 'https://nuxr3.zeabur.app/api',
+      method: 'POST',
+      body: {
+        ...requsetBody,
+      },
+    })
+    if (!response.status) {
+      throw new Error(response.message)
     }
-
-    error(response.message)
+    await success('註冊成功')
+    router.push('/login')
   }
-  catch (e: any) {
-    error(e.response?._data?.message || '註冊失敗')
+  catch (e: unknown) {
+    const { message } = (e as FetchError).response?._data
+    error(message)
   }
 }
 </script>
 
 <template>
-  <div class="bg-light py-3 py-md-5 vh-100">
+  <div class="py-3 py-md-5 vh-100">
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-12 col-md-11 col-lg-8 col-xl-7 col-xxl-6">
@@ -43,11 +53,11 @@ async function onSubmit() {
             <h2 class="h3 mb-4">
               會員註冊
             </h2>
-            <form @submit.prevent="onSubmit">
+            <form @submit.prevent="processRegistration(userRegisteObject)">
               <div class="form-floating mb-4">
                 <input
                   id="firstName"
-                  v-model="userRegisterObject.name"
+                  v-model="userRegisteObject.name"
                   type="text"
                   class="form-control"
                   placeholder="王小明"
@@ -59,10 +69,11 @@ async function onSubmit() {
               <div class="form-floating mb-4">
                 <input
                   id="email"
-                  v-model="userRegisterObject.email"
+                  v-model="userRegisteObject.email"
                   type="email"
                   class="form-control"
                   placeholder="example@gmail.com"
+                  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                   required
                 >
                 <label for="email">信箱 <span class="text-danger">*</span></label>
@@ -71,7 +82,7 @@ async function onSubmit() {
               <div class="form-floating mb-4">
                 <input
                   id="password"
-                  v-model="userRegisterObject.password"
+                  v-model="userRegisteObject.password"
                   type="password"
                   class="form-control"
                   placeholder="請輸入 8 碼以上密碼"
@@ -84,7 +95,7 @@ async function onSubmit() {
               <div class="form-floating mb-4">
                 <input
                   id="phone"
-                  v-model="userRegisterObject.phone"
+                  v-model="userRegisteObject.phone"
                   type="tel"
                   class="form-control"
                   placeholder="0912345678"
@@ -97,7 +108,7 @@ async function onSubmit() {
               <div class="form-floating mb-4">
                 <input
                   id="dateInput"
-                  v-model="userRegisterObject.birthday"
+                  v-model="userRegisteObject.birthday"
                   type="date"
                   class="form-control"
                   required
@@ -110,7 +121,7 @@ async function onSubmit() {
                   <div class="form-floating mb-4">
                     <input
                       id="zipcode"
-                      v-model="userRegisterObject.address.zipcode"
+                      v-model.number="userRegisteObject.address.zipcode"
                       type="text"
                       class="form-control"
                       placeholder="100"
@@ -124,7 +135,7 @@ async function onSubmit() {
                   <div class="form-floating mb-4">
                     <input
                       id="address"
-                      v-model="userRegisterObject.address.detail"
+                      v-model="userRegisteObject.address.detail"
                       type="text"
                       class="form-control"
                       placeholder="台北市中正區重慶南路一段"

@@ -1,8 +1,9 @@
 <script setup lang="ts">
+navigateTo('/register')
 </script>
 
 <template>
-  <h1>首頁頁面</h1>
+  <div>Page: index</div>
 </template>
 
 <style scoped lang="scss"></style>

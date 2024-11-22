@@ -13,7 +13,7 @@ export function useAlert() {
   // });
 
   const alert = async (icon: SweetAlertIcon, title: string) => {
-    $swal.fire({
+    await $swal.fire({
       position: 'center',
       icon,
       title,
@@ -23,11 +23,11 @@ export function useAlert() {
   }
 
   const success = async (title: string) => {
-    alert('success', title)
+    await alert('success', title)
   }
 
   const error = async (title: string) => {
-    alert('error', title)
+    await alert('error', title)
   }
 
   return {
