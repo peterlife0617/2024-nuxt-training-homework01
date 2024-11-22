@@ -11,28 +11,26 @@ export default defineNuxtRouteMiddleware(async () => {
   // middleware 要執行的 code 寫在這邊
 
   const token = useCookie('auth')
+  if (!token.value) {
+    return navigateTo('/login')
+  }
 
-  try {
-    const response = await $fetch<{ status: true, token: string } | { status: false, message: string }>(
-      '/user/check',
-      {
-        baseURL: 'https://nuxr3.zeabur.app/api/v1',
-        method: 'GET',
-        headers: {
-          Authorization: token.value ?? '',
-        },
+  const response = await $fetch<{ status: true, token: string } | { status: false, message: string }>(
+    '/user/check',
+    {
+      baseURL: 'https://nuxr3.zeabur.app/api/v1',
+      method: 'GET',
+      headers: {
+        Authorization: token.value,
       },
-    ).catch(() => {
-      return null
-    })
+    },
+  ).catch(() => {
+    return null
+  })
 
-    if (response?.status) {
-      return
-    }
+  if (response?.status) {
+    return
+  }
 
-    return navigateTo('/login')
-  }
-  catch {
-    return navigateTo('/login')
-  }
+  return navigateTo('/login')
 })
