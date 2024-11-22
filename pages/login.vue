@@ -1,74 +1,75 @@
 <script setup lang="ts">
 import type { FetchError } from 'ofetch'
+import type { UnwrapRef } from 'vue'
 
-const { success, error } = useAlert()
+const router = useRouter()
 
-// 表單格式
+const { $swal } = useNuxtApp()
 const userLoginObject = ref({
-  email: 'example13213123@gmail.com',
+  email: 'peterpeterpeter@gmail.com',
   password: 'a12345678',
 })
 
-async function loginAccount() {
-  /*
-  1. 串接旅館的 登入 API
-  2. 登入成功後，使用 useCookie() 將 token 寫入名稱為 “auth” 的 cookie
-  3. 需使用 try catch 處理請求
-  4. 請求成功與失敗皆使用 sweetAlert2 套件顯示訊息
- $swal.fire({
-   position: "center",
-   icon: ...,
-   title: ...,
-   showConfirmButton: false,
-   timer: 1500,
- });
-  */
-
+async function loginAccount(requsetBody: UnwrapRef<typeof userLoginObject>) {
   try {
     const response = await $fetch<{
       status: true
-      exp: number
       token: string
+      result: Record<string, any>
     } | {
       status: false
       message: string
-    }>('https://todolist-api.hexschool.io/users/sign_in', {
+    }>('/user/login', {
+      baseURL: 'https://nuxr3.zeabur.app/api/v1',
       method: 'POST',
-      body: userLoginObject.value,
+      body: {
+        ...requsetBody,
+      },
     })
 
     if (!response.status) {
-      error(response.message)
       return
     }
 
-    const { exp, token } = response
+    const { token } = response
 
-    const cookie = useCookie('auth', {
-      expires: new Date(exp * 1000),
+    const auth = useCookie('auth', {
       path: '/',
     })
+    auth.value = token
 
-    cookie.value = token
-    success('登入成功')
+    await $swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: '登入成功',
+      showConfirmButton: false,
+      timer: 1500,
+    })
+
+    router.push('/orders')
   }
-  catch (e: unknown) {
-    const { message } = (e as FetchError).response?._data
-
-    error(message)
+  catch (error) {
+    const { message } = (error as FetchError).response?._data
+    $swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: message,
+      showConfirmButton: false,
+      timer: 1500,
+    })
   }
 }
 </script>
 
 <template>
-  <div class="py-3 py-md-5 vh-100">
+  <div class="bg-light py-3 py-md-5 vh-100">
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-12 col-md-11 col-lg-8 col-xl-7 col-xxl-6">
           <h2 class="h3 mb-4">
             登入
           </h2>
-          <form @submit.prevent="loginAccount">
+          <form @submit.prevent="loginAccount(userLoginObject)">
             <div class="form-floating mb-4">
               <input
                 id="email"
@@ -94,9 +95,17 @@ async function loginAccount() {
               >
               <label for="password">密碼 <span class="text-danger">*</span></label>
             </div>
-            <button class="btn btn-lg btn-primary w-100" type="submit">
-              登入
-            </button>
+            <div class="d-flex gap-4">
+              <button class="btn btn-lg btn-primary w-50" type="submit">
+                登入
+              </button>
+              <NuxtLink
+                to="/register"
+                class="btn btn-lg btn-outline-primary w-50"
+              >
+                還沒有帳號
+              </NuxtLink>
+            </div>
           </form>
         </div>
       </div>

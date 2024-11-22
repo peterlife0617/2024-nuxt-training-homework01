@@ -1,5 +1,5 @@
 <script setup lang="ts">
-navigateTo('/register')
+navigateTo('/login')
 </script>
 
 <template>

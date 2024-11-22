@@ -2,50 +2,46 @@
 import type { FetchError } from 'ofetch'
 import type { UnwrapRef } from 'vue'
 
-const { success, error } = useAlert()
-
+const { $swal } = useNuxtApp()
 const router = useRouter()
 const userRegisteObject = ref({
-  name: '王曉明',
-  email: 'example13213123@gmail.com',
-  password: 'a12345678',
-  phone: '0912345678',
-  birthday: '2024-10-29',
+  name: '',
+  email: '',
+  password: '',
+  phone: '',
+  birthday: '',
   address: {
-    zipcode: '100',
-    detail: '123456',
+    zipcode: '',
+    detail: '',
   },
 })
 async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObject>) {
   try {
-    const response = await $fetch<{
-      status: true
-      uid: string
-    } | {
-      status: false
-      message: string
-    }>('/v1/user/signup', {
-      baseURL: 'https://nuxr3.zeabur.app/api',
+    await $fetch('/user/signup', {
+      baseURL: 'https://nuxr3.zeabur.app/api/v1',
       method: 'POST',
       body: {
         ...requsetBody,
       },
     })
-    if (!response.status) {
-      throw new Error(response.message)
-    }
-    await success('註冊成功')
+
     router.push('/login')
   }
-  catch (e: unknown) {
-    const { message } = (e as FetchError).response?._data
-    error(message)
+  catch (error) {
+    const { message } = (error as FetchError).response?._data
+    $swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: message,
+      showConfirmButton: false,
+      timer: 1500,
+    })
   }
 }
 </script>
 
 <template>
-  <div class="py-3 py-md-5 vh-100">
+  <div class="bg-light py-3 py-md-5 vh-100">
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-12 col-md-11 col-lg-8 col-xl-7 col-xxl-6">
@@ -145,10 +141,17 @@ async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObje
                   </div>
                 </div>
               </div>
-
-              <button class="btn btn-lg btn-primary w-100" type="submit">
-                註冊
-              </button>
+              <div class="d-flex gap-4">
+                <button class="btn btn-lg btn-primary w-50" type="submit">
+                  註冊
+                </button>
+                <NuxtLink
+                  to="/login"
+                  class="btn btn-lg btn-outline-primary w-50"
+                >
+                  已經有帳號
+                </NuxtLink>
+              </div>
             </form>
           </div>
         </div>
