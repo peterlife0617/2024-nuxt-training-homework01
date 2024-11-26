@@ -1,9 +1,10 @@
-import type Swal from 'sweetalert2'
+import type { Directive } from 'vue'
 
-declare module '#app' {
-  interface NuxtApp {
-    $swal: typeof Swal
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    vTextformat: Directive<any, string, any, 'uppercase' | 'lowercase'>
+    vTimeformat: Directive
   }
 }
 
-export {}
+export { }
