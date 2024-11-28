@@ -95,8 +95,8 @@ const { data: roomsList } = await useFetch('/rooms', {
 
 <style scoped lang="scss">
 .card-img-top {
-  object-fit: cover;
-  height: 200px;
   max-width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 </style>

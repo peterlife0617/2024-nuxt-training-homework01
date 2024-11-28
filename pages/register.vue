@@ -4,7 +4,7 @@ import type { UnwrapRef } from 'vue'
 
 const { $swal } = useNuxtApp()
 const router = useRouter()
-const userRegisteObject = ref({
+const userRegisterObject = ref({
   name: '',
   email: '',
   password: '',
@@ -15,13 +15,13 @@ const userRegisteObject = ref({
     detail: '',
   },
 })
-async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObject>) {
+async function processRegistration(requestBody: UnwrapRef<typeof userRegisterObject>) {
   try {
     await $fetch('/user/signup', {
       baseURL: 'https://nuxr3.zeabur.app/api/v1',
       method: 'POST',
       body: {
-        ...requsetBody,
+        ...requestBody,
       },
     })
 
@@ -49,11 +49,11 @@ async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObje
             <h2 class="h3 mb-4">
               會員註冊
             </h2>
-            <form @submit.prevent="processRegistration(userRegisteObject)">
+            <form @submit.prevent="processRegistration(userRegisterObject)">
               <div class="form-floating mb-4">
                 <input
                   id="firstName"
-                  v-model="userRegisteObject.name"
+                  v-model="userRegisterObject.name"
                   type="text"
                   class="form-control"
                   placeholder="王小明"
@@ -65,7 +65,7 @@ async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObje
               <div class="form-floating mb-4">
                 <input
                   id="email"
-                  v-model="userRegisteObject.email"
+                  v-model="userRegisterObject.email"
                   type="email"
                   class="form-control"
                   placeholder="example@gmail.com"
@@ -78,7 +78,7 @@ async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObje
               <div class="form-floating mb-4">
                 <input
                   id="password"
-                  v-model="userRegisteObject.password"
+                  v-model="userRegisterObject.password"
                   type="password"
                   class="form-control"
                   placeholder="請輸入 8 碼以上密碼"
@@ -91,7 +91,7 @@ async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObje
               <div class="form-floating mb-4">
                 <input
                   id="phone"
-                  v-model="userRegisteObject.phone"
+                  v-model="userRegisterObject.phone"
                   type="tel"
                   class="form-control"
                   placeholder="0912345678"
@@ -104,7 +104,7 @@ async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObje
               <div class="form-floating mb-4">
                 <input
                   id="dateInput"
-                  v-model="userRegisteObject.birthday"
+                  v-model="userRegisterObject.birthday"
                   type="date"
                   class="form-control"
                   required
@@ -117,7 +117,7 @@ async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObje
                   <div class="form-floating mb-4">
                     <input
                       id="zipcode"
-                      v-model.number="userRegisteObject.address.zipcode"
+                      v-model.number="userRegisterObject.address.zipcode"
                       type="text"
                       class="form-control"
                       placeholder="100"
@@ -131,7 +131,7 @@ async function processRegistration(requsetBody: UnwrapRef<typeof userRegisteObje
                   <div class="form-floating mb-4">
                     <input
                       id="address"
-                      v-model="userRegisteObject.address.detail"
+                      v-model="userRegisterObject.address.detail"
                       type="text"
                       class="form-control"
                       placeholder="台北市中正區重慶南路一段"

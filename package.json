@@ -10,32 +10,46 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "type-check": "vue-tsc --noEmit"
+    "stylelint": "stylelint \"**/*.{scss,vue}\"",
+    "stylelint:fix": "stylelint \"**/*.{scss,vue}\" --fix",
+    "spell-check": "cspell --cache --show-suggestions --gitignore .",
+    "type-check": "vue-tsc --noEmit",
+    "prepare": "npx simple-git-hooks"
   },
   "dependencies": {
     "@nuxt/eslint": "^0.6.1",
     "bootstrap": "^5.3.3",
     "nuxt": "^3.13.2",
     "sweetalert2": "^11.14.5",
-    "vue": "latest",
+    "vue": "^3.5.13",
     "vue-loading-overlay": "^6.0.6",
-    "vue-router": "latest"
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.9.1",
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@nuxtjs/stylelint-module": "^5.2.0",
     "@types/bootstrap": "^5.2.10",
+    "cspell": "^8.16.1",
     "eslint": "^9.14.0",
     "eslint-plugin-format": "^0.1.2",
     "lint-staged": "^15.2.10",
     "sass": "^1.80.6",
     "simple-git-hooks": "^2.11.1",
+    "stylelint": "^16.10.0",
+    "stylelint-config-recess-order": "^5.1.1",
+    "stylelint-config-standard-scss": "^13.1.0",
+    "stylelint-config-standard-vue": "^1.0.0",
     "typescript": "^5.6.3",
     "vue-tsc": "^2.1.10"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "npx cspell --gitignore . && npx lint-staged",
+    "commit-msg": "npx commitlint --edit $1"
   },
   "lint-staged": {
-    "*": "eslint --fix"
+    "*": "eslint --fix",
+    "*.{scss,vue}": "stylelint --fix"
   }
 }

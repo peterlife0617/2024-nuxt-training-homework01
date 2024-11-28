@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint'],
+  modules: ['@nuxt/eslint', '@nuxtjs/stylelint-module'],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   typescript: {
@@ -10,6 +10,9 @@ export default defineNuxtConfig({
     config: {
       standalone: false,
     },
+  },
+  stylelint: {
+    lintOnStart: false,
   },
   css: ['@/assets/stylesheets/all.scss'],
 

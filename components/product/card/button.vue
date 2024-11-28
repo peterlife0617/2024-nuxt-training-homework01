@@ -15,13 +15,13 @@ defineProps({
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  font-size: 16px;
   color: white;
+  text-align: center;
+  cursor: pointer;
+  background-color: #007bff;
   border: none;
   border-radius: 0 0 8px 8px;
-  cursor: pointer;
-  text-align: center;
-  font-size: 16px;
 }
 
 .product-button:hover {

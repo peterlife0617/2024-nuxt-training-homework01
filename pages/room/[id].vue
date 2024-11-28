@@ -144,16 +144,16 @@ const isProvide = function (isProvideBoolean = false) {
 <style scoped lang="scss">
 .room-page {
   max-width: 1200px;
+  padding: 20px;
   margin: 0 auto;
   background-color: #fff;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 10%);
 }
 
 .room-header {
-  text-align: center;
   margin-bottom: 30px;
+  text-align: center;
 }
 
 .room-name {
@@ -177,14 +177,14 @@ const isProvide = function (isProvideBoolean = false) {
   width: 100%;
   max-width: 600px;
   height: auto;
-  border-radius: 10px;
   margin-bottom: 20px;
+  border-radius: 10px;
 }
 
 .room-image-list {
   display: flex;
-  justify-content: center;
   gap: 10px;
+  justify-content: center;
   padding: 0;
   list-style: none;
 }
@@ -192,8 +192,8 @@ const isProvide = function (isProvideBoolean = false) {
 .room-image-list img {
   width: 100px;
   height: auto;
-  border-radius: 5px;
   cursor: pointer;
+  border-radius: 5px;
   transition: transform 0.3s;
 }
 
@@ -208,14 +208,14 @@ const isProvide = function (isProvideBoolean = false) {
 }
 
 .info-block {
-  background-color: #f0f0f0;
   padding: 15px;
+  background-color: #f0f0f0;
   border-radius: 10px;
 }
 
 .info-block h2 {
-  font-size: 1.5rem;
   margin-bottom: 10px;
+  font-size: 1.5rem;
   color: #444;
 }
 
@@ -226,8 +226,8 @@ const isProvide = function (isProvideBoolean = false) {
 }
 
 .info-block ul {
-  list-style: none;
   padding-left: 0;
+  list-style: none;
 }
 
 .info-block ul li {

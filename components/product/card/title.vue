@@ -12,9 +12,9 @@ defineProps({
 
 <style scoped lang="scss">
 .product-title {
+  margin: 16px 0 8px;
   font-size: 18px;
   font-weight: bold;
-  margin: 16px 0 8px;
   text-align: center;
 }
 </style>

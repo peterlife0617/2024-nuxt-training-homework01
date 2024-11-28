@@ -10,7 +10,7 @@ const userLoginObject = ref({
   password: 'a12345678',
 })
 
-async function loginAccount(requsetBody: UnwrapRef<typeof userLoginObject>) {
+async function loginAccount(requestBody: UnwrapRef<typeof userLoginObject>) {
   try {
     const response = await $fetch<{
       status: true
@@ -23,7 +23,7 @@ async function loginAccount(requsetBody: UnwrapRef<typeof userLoginObject>) {
       baseURL: 'https://nuxr3.zeabur.app/api/v1',
       method: 'POST',
       body: {
-        ...requsetBody,
+        ...requestBody,
       },
     })
 

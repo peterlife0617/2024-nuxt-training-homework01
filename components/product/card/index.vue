@@ -22,11 +22,11 @@ defineProps({
 
 <style scoped lang="scss">
 .product-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
   max-width: 300px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
   transition: transform 0.3s ease;
 }
 

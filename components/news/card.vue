@@ -34,21 +34,21 @@ defineProps({
 .card {
   display: flex;
   margin: 20px 0;
+  overflow: hidden;
+  background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
 
   &-image {
     flex: 1;
     max-width: 40%;
 
     img {
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
   }
 
@@ -57,16 +57,16 @@ defineProps({
     padding: 20px;
   }
   &-title {
-    font-size: 1.5rem;
     margin: 0;
+    font-size: 1.5rem;
     color: #333;
   }
 
   &-description {
-    font-size: 1rem;
-    color: #555;
-    line-height: 1.5;
     margin-top: 10px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
   }
 
   &-timestamps {
