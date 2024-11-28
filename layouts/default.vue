@@ -4,7 +4,7 @@
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container">
       <NuxtLink class="navbar-brand" to="/">
-        Navbar
+        Day19 題目
       </NuxtLink>
       <button
         class="navbar-toggler"
@@ -25,17 +25,15 @@
             </NuxtLink>
           </li>
           <li class="nav-item">
-            <NuxtLink class="nav-link" to="/room">
-              房型
+            <NuxtLink class="nav-link" to="/order">
+              預訂結果頁面
             </NuxtLink>
           </li>
         </ul>
       </div>
     </div>
   </nav>
-  <main class="container">
-    <slot />
-  </main>
+  <slot />
 </template>
 
 <style scoped lang="scss"></style>
