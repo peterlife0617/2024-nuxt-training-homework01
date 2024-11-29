@@ -97,4 +97,10 @@ export default defineNuxtConfig({
       }],
     },
   },
+
+  runtimeConfig: {
+    public: {
+      apiUrl: 'https://todolist-api.hexschool.io',
+    },
+  },
 })
