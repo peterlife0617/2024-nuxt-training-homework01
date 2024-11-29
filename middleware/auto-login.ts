@@ -1,3 +1,6 @@
+const exampleMail = 'example0617@gmail.com'
+const examplePw = 'example'
+
 export default defineNuxtRouteMiddleware(async () => {
   const nuxtApp = useNuxtApp()
   const { public: { apiUrl } } = useRuntimeConfig()
@@ -19,8 +22,8 @@ export default defineNuxtRouteMiddleware(async () => {
       method: 'POST',
       baseURL: apiUrl,
       body: {
-        email: 'example0617@gmail.com',
-        password: 'example',
+        email: exampleMail,
+        password: examplePw,
       },
     })
 
@@ -49,5 +52,21 @@ export default defineNuxtRouteMiddleware(async () => {
   if (!checkResponse?.status) {
     // Token 無效
     auth.value = null
+
+    // 3. Token 無效有可能是資料被清除，重新註冊
+    const signUpResponse = await $fetch<{ status: true } | { status: false, message: string }>('/users/sign_up', {
+      method: 'POST',
+      baseURL: apiUrl,
+      body: {
+        email: exampleMail,
+        password: examplePw,
+        nickname: 'example',
+      },
+    })
+    if (signUpResponse.status) {
+      // 重新註冊成功
+      // eslint-disable-next-line no-console
+      console.log('重新註冊成功, 請重新整理頁面')
+    }
   }
 })
