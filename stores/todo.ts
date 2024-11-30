@@ -60,7 +60,6 @@ export const useTodoStore = defineStore('todo', () => {
       }
     }
     catch (error) {
-      // eslint-disable-next-line no-console
       console.log(error)
     }
     finally {
@@ -81,7 +80,6 @@ export const useTodoStore = defineStore('todo', () => {
       todoList.value.splice(todoIndex, 1)
     }
     catch (error) {
-      // eslint-disable-next-line no-console
       console.log(error)
     }
     finally {
