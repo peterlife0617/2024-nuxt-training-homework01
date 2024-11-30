@@ -1,10 +1,5 @@
-import { Modal, Offcanvas } from 'bootstrap'
+import * as bootstrap from 'bootstrap'
 
-export default defineNuxtPlugin(() => {
-  return {
-    provide: {
-      modal: Modal,
-      offcanvas: Offcanvas,
-    },
-  }
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.provide('bootstrap', bootstrap)
 })

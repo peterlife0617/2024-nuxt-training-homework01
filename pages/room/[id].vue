@@ -1,44 +1,24 @@
 <script setup lang="ts">
 const router = useRouter()
 const route = useRoute()
-
 const { id } = route.params
 
-const { data: roomObject } = await useFetch(`/rooms/${id}`, {
-  baseURL: 'https://nuxr3.zeabur.app/api/v1',
-  transform: (response: { status: boolean, result: Record<string, any> }) => {
-    const { result } = response
-    return result
-  },
-  onResponseError({ response }) {
-    const { message } = response._data
-    console.error('Error:', message)
-    router.push('/')
-  },
+const { selectedRoom: data } = storeToRefs(useBookingStore())
+const { setRoomOnServer } = useBookingStore()
+
+// 將房型資料 data 改成使用 Pinia 管理
+const { error } = await useAsyncData(`room-data`, async () => {
+  if (id) {
+    return await setRoomOnServer(id.toString()).then(() => true)
+  }
+
+  throw new Error('沒有房型 ID')
 })
 
-/*
-請將 useSeoMeta({ }) 改成 Nuxt3 SEO 元件的寫法
-重複邏輯的地方可以使用 computed
-
-useSeoMeta({
-  title: roomObject.value.name,
-  titleTemplate: (title) => `Freyja | ${title}`,
-  description: () => `${roomObject.value.description}`,
-  ogTitle: () => `Freyja | ${roomObject.value.name}`,
-  ogDescription: () => `${roomObject.value.description}`,
-  ogImage: () => `${roomObject.value.imageUrl}`,
-  ogUrl: () => `https://freyja.travel.com.tw/room/${roomObject.value._id}`,
-  twitterCard: "summary_large_image",
-  twitterTitle: () => `Freyja | ${roomObject.value.name}`,
-  twitterDescription: () => `${roomObject.value.description}`,
-  twitterImage: () => `${roomObject.value.imageUrl}`,
-});
-*/
-
-const title = computed(() => `Freyja | ${roomObject.value?.name}`)
-const description = computed(() => `${roomObject.value?.description}`)
-const imageUrl = computed(() => `${roomObject.value?.imageUrl}`)
+if (error.value) {
+  alert('發生錯誤 ! ')
+  router.push('/room')
+}
 
 const isProvide = function (isProvideBoolean = false) {
   return isProvideBoolean ? '提供' : '未提供'
@@ -46,66 +26,53 @@ const isProvide = function (isProvideBoolean = false) {
 </script>
 
 <template>
-  <Head>
-    <!-- 請在此處作答，使用元件設定頁面的 SEO Meta  -->
-    <Title>{{ title }}</Title>
-    <Meta name="description" :content="description" />
-    <Meta property="og:title" :content="title" />
-    <Meta property="og:description" :content="description" />
-    <Meta property="og:image" :content="imageUrl" />
-    <Meta property="og:url" :content="`https://freyja.travel.com.tw/room/${roomObject?._id}`" />
-    <Meta name="twitter:card" content="summary_large_image" />
-    <Meta name="twitter:title" :content="title" />
-    <Meta name="twitter:description" :content="description" />
-    <Meta name="twitter:image" :content="imageUrl" />
-  </Head>
-
-  <h2>房型詳細頁面</h2>
   <div class="container">
-    <button @click="router.go(-1)">
+    <h2>房型詳細頁面</h2>
+    <button class="btn btn-outline-primary" @click="router.go(-1)">
       回上一頁
     </button>
-    <div v-if="roomObject" class="row justify-content-center">
+    <div class="row justify-content-center">
       <div class="col-lg-6">
-        <div class="room-page">
+        <!-- 以 Pinia 的資料渲染 HTML  -->
+        <div v-if="data" class="room-page">
           <div class="room-header">
             <h1 class="room-name">
-              {{ roomObject.name }}
+              {{ data.name }}
             </h1>
             <p class="room-description">
-              {{ roomObject.description }}
+              {{ data.description }}
             </p>
           </div>
 
           <div class="room-gallery">
             <img
-              :src="roomObject.imageUrl"
-              :alt="roomObject.name"
+              :src="data.imageUrl"
+              :alt="data.name"
               class="room-main-image"
             >
             <ul class="room-image-list">
-              <li v-for="(url, index) in roomObject.imageUrlList" :key="index">
-                <img
-                  :src="url"
-                  :alt="`${roomObject.name}圖片${index + 1}`"
-                >
+              <li v-for="(imageUrl, index) in data.imageUrlList" :key="index">
+                <img :src="imageUrl" :alt="`${data.name}圖片${index + 1}`">
               </li>
             </ul>
+            <NuxtLink class="btn btn-lg btn-warning" to="/booking">
+              立即預約
+            </NuxtLink>
           </div>
 
           <div class="room-info">
             <div class="info-block">
               <h2>房間資訊</h2>
-              <p>面積: {{ roomObject.areaInfo }}</p>
-              <p>床型: {{ roomObject.bedInfo }}</p>
-              <p>最多容納人數: {{ roomObject.maxPeople }}</p>
-              <p>價格: {{ roomObject.price }}</p>
+              <p>面積: {{ data.areaInfo }}</p>
+              <p>床型: {{ data.bedInfo }}</p>
+              <p>最多容納人數: {{ data.maxPeople }}</p>
+              <p>價格: {{ data.price }}</p>
             </div>
 
             <div class="info-block">
               <h2>房間配置</h2>
               <ul>
-                <li v-for="layout in roomObject.layoutInfo" :key="layout.title">
+                <li v-for="layout in data.layoutInfo" :key="layout.title">
                   {{ layout.title }}: {{ isProvide(layout.isProvide) }}
                 </li>
               </ul>
@@ -114,10 +81,7 @@ const isProvide = function (isProvideBoolean = false) {
             <div class="info-block">
               <h2>房內設施</h2>
               <ul>
-                <li
-                  v-for="facility in roomObject.facilityInfo"
-                  :key="facility.title"
-                >
+                <li v-for="facility in data.facilityInfo" :key="facility.title">
                   {{ facility.title }}: {{ isProvide(facility.isProvide) }}
                 </li>
               </ul>
@@ -126,10 +90,7 @@ const isProvide = function (isProvideBoolean = false) {
             <div class="info-block">
               <h2>客房備品</h2>
               <ul>
-                <li
-                  v-for="amenity in roomObject.amenityInfo"
-                  :key="amenity.title"
-                >
+                <li v-for="amenity in data.amenityInfo" :key="amenity.title">
                   {{ amenity.title }}: {{ isProvide(amenity.isProvide) }}
                 </li>
               </ul>
