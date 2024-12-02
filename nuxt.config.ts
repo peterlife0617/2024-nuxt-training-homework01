@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxtjs/stylelint-module', '@pinia/nuxt'],
+  modules: ['@nuxt/eslint', '@nuxtjs/stylelint-module', '@pinia/nuxt', '@vee-validate/nuxt'],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   typescript: {
@@ -101,6 +101,13 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiUrl: '',
+    },
+  },
+  veeValidate: {
+    componentNames: {
+      Form: 'VForm',
+      Field: 'VField',
+      ErrorMessage: 'VErrorMessage',
     },
   },
 })
