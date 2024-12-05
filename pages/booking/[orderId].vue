@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ['auth'],
+})
+
 const bookingStore = useBookingStore()
 const { order: orderInfo } = storeToRefs(bookingStore)
 
