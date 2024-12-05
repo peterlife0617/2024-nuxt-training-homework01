@@ -10,7 +10,7 @@ export default defineNuxtRouteMiddleware(async () => {
 
   // middleware 要執行的 code 寫在這邊
 
-  const token = useCookie('auth')
+  const token = useCookie('accountToken')
   if (!token.value) {
     return navigateTo('/login')
   }

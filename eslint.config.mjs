@@ -19,11 +19,18 @@ export default withNuxt(
           },
         ],
         'vue/define-macros-order': ['error', { order: ['definePage', 'defineModel', 'defineCustom', 'defineEmits', 'defineSlots'], defineExposeLast: true }],
+        'vue/enforce-style-attribute': ['error', {
+          allow: ['scoped'],
+        }],
       },
     },
     rules: {
       'no-console': 'warn',
       'no-alert': 'warn',
+      'unicorn/filename-case': ['error', {
+        case: 'kebabCase',
+        ignore: [/\.vue$/, /\.md$/],
+      }],
     },
   }),
 )

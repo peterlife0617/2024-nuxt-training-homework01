@@ -1,42 +1,50 @@
-import type { BookingResult } from '~/models/order'
-import type { Room } from '~/models/room'
+import type { CreateOrderResponse } from '~/api/models/order'
+import type { GetRoomResponse } from '~/api/models/room'
+import { ServiceRoom } from '~/api/services/room'
+import type { BookingResult } from '~/models/booking'
 
 export const useBookingStore = defineStore('booking', () => {
-  const { public: {
-    apiUrl,
-  } } = useRuntimeConfig()
+  const { fetchData } = useApi()
+  const { getRoom: apiGetRoom } = ServiceRoom()
 
-  // 訂單資訊的格式
-  const bookingResult = ref<BookingResult>(null)
+  const room = ref<GetRoomResponse | null>(null)
+  const bookingResult = ref<BookingResult | null>(null)
+  const order = ref<CreateOrderResponse | null>(null)
 
-  const selectedRoom = ref<Room | null>(null)
-
-  const setSelectedRoom = (room: Room | null) => {
-    selectedRoom.value = room
+  const setRoom = (value: GetRoomResponse | null) => {
+    room.value = value
   }
 
   const getRoom = async (id: string) => {
-    const response = await $fetch<{ status: true, result: Room } | { status: false, message: string }>(`/rooms/${id}`, {
-      baseURL: apiUrl,
-    })
-
+    const response = await fetchData(() => apiGetRoom(id))
     if (response.status) {
       return response.result
     }
     return null
   }
 
-  const setRoomOnServer = async (id: string) => {
-    await useAsyncData('set-room-data', async () => {
-      const room = await getRoom(id)
-      setSelectedRoom(room)
-      return true
-    })
+  const setBookingResult = (value: BookingResult | null) => {
+    bookingResult.value = value
+  }
+
+  const setOrder = (value: CreateOrderResponse) => {
+    order.value = value
   }
 
   return {
+    room,
     bookingResult,
-    selectedRoom,
-    setRoomOnServer,
+    order,
+    getRoom,
+    setRoom,
+    setBookingResult,
+    setOrder,
+    bookingDays: computed(() => {
+      if (!bookingResult.value) {
+        return 0
+      }
+      const { checkInDate, checkOutDate } = bookingResult.value
+      return countDateDiffs({ start: checkInDate, end: checkOutDate })
+    }),
   }
 })

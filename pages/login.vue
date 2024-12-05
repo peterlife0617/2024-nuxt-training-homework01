@@ -1,114 +1,94 @@
 <script setup lang="ts">
 import type { FetchError } from 'ofetch'
-import type { UnwrapRef } from 'vue'
+import { ServiceUser } from '~/api/services/user'
 
 const router = useRouter()
+const accountToken = useCookie('accountToken')
+const { fetchData, isFetch } = useApi()
+const { login } = ServiceUser()
 
-const { $swal } = useNuxtApp()
-const userLoginObject = ref({
-  email: 'peterpeterpeter@gmail.com',
-  password: 'a12345678',
-})
+async function loginAccount(userData: Record<string, any> = {}) {
+  if (isFetch.value) {
+    return
+  }
 
-async function loginAccount(requestBody: UnwrapRef<typeof userLoginObject>) {
   try {
-    const response = await $fetch<{
-      status: true
-      token: string
-      result: Record<string, any>
-    } | {
-      status: false
-      message: string
-    }>('/user/login', {
-      baseURL: 'https://nuxr3.zeabur.app/api/v1',
-      method: 'POST',
-      body: {
-        ...requestBody,
-      },
-    })
+    const loginResponse = await fetchData(() => login({
+      email: userData.email,
+      password: userData.password,
+    }))
 
-    if (!response.status) {
-      return
+    if (loginResponse.status) {
+      const { token } = loginResponse
+      accountToken.value = token
+      alert('登入成功 ! ')
+      router.push('/rooms')
     }
-
-    const { token } = response
-
-    const auth = useCookie('auth', {
-      path: '/',
-    })
-    auth.value = token
-
-    await $swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: '登入成功',
-      showConfirmButton: false,
-      timer: 1500,
-    })
-
-    router.push('/orders')
   }
   catch (error) {
-    const { message } = (error as FetchError).response?._data
-    $swal.fire({
-      position: 'center',
-      icon: 'error',
-      title: message,
-      showConfirmButton: false,
-      timer: 1500,
-    })
+    alert((error as FetchError).data?.message)
   }
 }
 </script>
 
 <template>
-  <div class="bg-light py-3 py-md-5 vh-100">
-    <div class="container">
-      <div class="row justify-content-md-center">
-        <div class="col-12 col-md-11 col-lg-8 col-xl-7 col-xxl-6">
-          <h2 class="h3 mb-4">
-            登入
-          </h2>
-          <form @submit.prevent="loginAccount(userLoginObject)">
-            <div class="form-floating mb-4">
-              <input
+  <main>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-4">
+          <div class="px-5 px-md-0">
+            <p class="mb-2 fw-bold">
+              享樂酒店，誠摯歡迎
+            </p>
+            <h1 class="fw-bold">
+              立即開始旅程
+            </h1>
+          </div>
+          <VForm
+            v-slot="{ errors }" :initial-values="{
+              email: 'example@example.com',
+              password: 'a12345678',
+            }"
+            @submit="loginAccount"
+          >
+            <div class="mb-4">
+              <label class="mb-2 fw-bold" for="email"> 電子信箱 </label>
+              <VField
                 id="email"
-                v-model="userLoginObject.email"
+                name="email"
+                rules="required|email"
+                class="form-control p-3 fw-medium"
+                :class="{ 'is-invalid': errors.email }"
+                placeholder="請輸入信箱"
                 type="email"
-                class="form-control"
-                placeholder="example@gmail.com"
-                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                required
-              >
-              <label for="email">信箱 <span class="text-danger">*</span></label>
+              />
+              <VErrorMessage name="email" class="invalid-feedback" />
             </div>
-
-            <div class="form-floating mb-4">
-              <input
+            <div class="mb-4">
+              <label class="mb-2 fw-bold" for="password"> 密碼 </label>
+              <VField
                 id="password"
-                v-model="userLoginObject.password"
+                name="password"
+                rules="required|min:8"
+                class="form-control p-3 fw-medium"
+                :class="{ 'is-invalid': errors.password }"
+                placeholder="請輸入password"
                 type="password"
-                class="form-control"
-                placeholder="請輸入 8 碼以上密碼"
-                pattern=".{8,}"
-                required
-              >
-              <label for="password">密碼 <span class="text-danger">*</span></label>
+              />
+              <VErrorMessage name="password" class="invalid-feedback" />
             </div>
-            <div class="d-flex gap-4">
-              <button class="btn btn-lg btn-primary w-50" type="submit">
-                登入
-              </button>
-              <NuxtLink
-                to="/register"
-                class="btn btn-lg btn-outline-primary w-50"
-              >
-                還沒有帳號
-              </NuxtLink>
-            </div>
-          </form>
+            <button
+              type="submit"
+              :disabled="isFetch"
+              class="btn btn-primary w-100 py-3 fw-bold"
+            >
+              會員登入
+            </button>
+          </VForm>
         </div>
       </div>
     </div>
-  </div>
+  </main>
 </template>
+
+<style lang="scss" scoped></style>
