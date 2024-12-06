@@ -2,19 +2,20 @@
 import { ServiceOrder } from '~/api/services/order'
 
 definePageMeta({
-  middleware: ['auth'],
+  middleware: ['auth', (to) => {
+    const bookingStore = useBookingStore()
+    const { bookingResult } = storeToRefs(bookingStore)
+    if (!bookingResult.value) {
+      return navigateTo(`/rooms/${to.params.roomId}`)
+    }
+  }],
 })
 
 const router = useRouter()
-const route = useRoute()
 
 const bookingStore = useBookingStore()
 const { room: roomInfo, bookingResult, bookingDays } = storeToRefs(bookingStore)
 const { setOrder } = bookingStore
-
-if (!bookingResult.value) {
-  navigateTo(`/rooms/${route.params.roomId}`)
-}
 
 const { fetchData } = useApi()
 const { createOrder: apiCreateOrder } = ServiceOrder()

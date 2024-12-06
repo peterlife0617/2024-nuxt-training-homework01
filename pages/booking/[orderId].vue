@@ -1,14 +1,16 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: ['auth'],
+  middleware: ['auth', () => {
+    const bookingStore = useBookingStore()
+    const { order: orderInfo } = storeToRefs(bookingStore)
+    if (!orderInfo.value) {
+      return navigateTo('/rooms')
+    }
+  }],
 })
 
 const bookingStore = useBookingStore()
 const { order: orderInfo } = storeToRefs(bookingStore)
-
-if (!orderInfo.value) {
-  navigateTo('/rooms')
-}
 </script>
 
 <template>
